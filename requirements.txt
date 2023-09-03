@@ -1,0 +1,4 @@
+Flask
+Requests
+python-dotenv
+flask_login
