@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>My weather app</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9"
+      crossorigin="anonymous"
+    />
+  </head>
+  <body class="bg-info text-white">
+    <div class="text-center">
+      <h1 class="mt-5">Weather app</h1>
+      {% if current_user.is_authenticated %}
+      <form action="/logout" method="get">
+        <button class="btn btn-light">Logout</button>
+      </form>
+      <br />
+      <form action="/" method="post">
+        <div class="container">
+          <div class="row">
+            <div class="col-sm">
+              <input
+                type="text"
+                id="CityName"
+                name="CityName"
+                placeholder="city"
+                class="form-control"
+              />
+            </div>
+            <div class="col-sm">
+              <input
+                type="text"
+                id="StateName"
+                name="StateName"
+                placeholder="state"
+                class="form-control"
+              />
+            </div>
+            <div class="col-sm">
+              <input
+                type="text"
+                id="CountryName"
+                name="CountryName"
+                placeholder="country"
+                class="form-control"
+              />
+            </div>
+          </div>
+        </div>
+        <br />
+        <button class="btn btn-light">Find</button>
+      </form>
+
+      {% if data %} {{ data.main }}: {{ data.description}} <br />
+      <img
+        src="https://openweathermap.org/img/wn/{{data.icon}}@2x.png"
+        alt="Icon"
+      />
+      {{ data.temperature }} C {% endif %} {% else %}
+      <p>You need to be logged in to view weather information.</p>
+      <form action="/login" method="post">
+        <div class="container">
+          <div class="row">
+            <div class="col-sm">
+              <input
+                type="text"
+                id="username"
+                name="username"
+                placeholder="Username"
+                class="form-control"
+              />
+            </div>
+            <div class="col-sm">
+              <input
+                type="password"
+                id="password"
+                name="password"
+                placeholder="Password"
+                class="form-control"
+              />
+            </div>
+            <div class="col-sm">
+              <button class="btn btn-light">Login</button>
+            </div>
+          </div>
+        </div>
+      </form>
+      {% endif %}
+    </div>
+    <div id="demo"></div>
+    <div id="country"></div>
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm"
+      crossorigin="anonymous"
+    ></script>
+    <script type="text/javascript" src="./index.js"></script>
+    <script>
+      var x = document.getElementById("demo");
+      let y = document.getElementById("country");
+
+      function getLocation() {
+        if (navigator.geolocation) {
+          navigator.geolocation.getCurrentPosition(showPosition);
+        } else {
+          x.innerHTML = "Geolocation is not supported by this browser.";
+        }
+      }
+
+      const getCity = async (lat, long) => {
+        const response = await fetch("https://geolocation-db.com/json");
+        const parsed = await response.json();
+        console.log(parsed);
+        y.innerHTML = "CountryName: " + parsed.country_name;
+        return parsed;
+      };
+
+      const showPosition = async (position) => {
+        const data = getCity(
+          position.coords.latitude,
+          position.coords.longitude
+        );
+        x.innerHTML =
+          "Latitude: " +
+          position.coords.latitude +
+          "<br>Longitude: " +
+          position.coords.longitude;
+        "<br>CountryName: " + data.country_name;
+      };
+
+      getLocation();
+    </script>
+  </body>
+</html>
