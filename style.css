@@ -1,6 +1,6 @@
 .body {
-    background: rgb(3,62,131);
-background: linear-gradient(77deg, rgba(3,62,131,1) 6%, rgba(0,76,188,1) 100%);
+    background: rgb(209, 211, 213);
+background: linear-gradient(77deg, rgb(89, 159, 240) 6%, rgb(68, 115, 186) 100%);
 }
 .text-center {
     font-family: Nunito sans;
